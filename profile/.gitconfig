@@ -1,0 +1,35 @@
+[color]
+	diff = auto
+	status = auto
+	log = auto
+	branch = auto
+[alias]
+	co = checkout
+	st = status
+	br = branch
+	la = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	log = auto
+
+[user]
+	email = cmj@cmj.tw
+	name = cmj
+[credential]
+	helper = cache --timeout=3600
+[core]
+	editor = vim
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[push]
+	default = simple
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff
+
+# vim: filetype=gitconfig
+[init]
+	defaultBranch = main
