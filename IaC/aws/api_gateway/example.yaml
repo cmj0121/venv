@@ -1,0 +1,148 @@
+---
+swagger: "2.0"
+info:
+  title: Sample API
+  description: API description in YAML
+  version: 1.0.0
+
+schemes:
+  - https
+paths:
+  /:
+    get:
+      description: Dummy API
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      responses:
+        200:
+          description: Always OK
+          headers:
+            Content-Type:
+              type: string
+              description: Media type of request
+      x-amazon-apigateway-integration:
+        type: mock
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        responses:
+          default:
+            statusCode: 200
+            responseParameters:
+              method.response.header.Content-Type: '''text/plain'''
+
+            responseTemplates:
+              text/plain: Ok
+  /pets:
+    get:
+      tags:
+        - pets
+      summary: List all pets
+      produces:
+        - application/json
+      parameters:
+        - name: type
+          in: query
+          description: The type of pet to retrieve
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: Page number of results to return.
+          required: false
+          type: string
+      responses:
+        200:
+          description: List all Pets information
+          schema:
+            $ref: '#/definitions/Pets'
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+              description: URI that may access the resource
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        requestParameters:
+          integration.request.querystring.page: method.request.querystring.page
+          integration.request.querystring.type: method.request.querystring.type
+        uri: http://petstore.execute-api.us-west-2.amazonaws.com/petstore/pets
+        passthroughBehavior: when_no_match
+        httpMethod: GET
+        type: http
+    post:
+      tags:
+        - pets
+      operationId: CreatePet
+      summary: Create a pet
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: NewPet
+          required: true
+          schema:
+            $ref: '#/definitions/NewPet'
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/NewPetResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+              description: URI that may access the resource
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: http://petstore.execute-api.us-west-2.amazonaws.com/petstore/pets
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: http
+
+definitions:
+  Pets:
+    type: array
+    items:
+      $ref: '#/definitions/Pet'
+  NewPetResponse:
+    type: object
+    properties:
+      pet:
+        $ref: '#/definitions/Pet'
+      message:
+        type: string
+  Pet:
+    type: object
+    properties:
+      id:
+        type: integer
+      type:
+        type: string
+      price:
+        type: number
+  NewPet:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/PetType'
+      price:
+        type: number
+  PetType:
+    type: string
+    enum:
+      - dog
+      - cat
+      - fish
+      - bird
+      - gecko
