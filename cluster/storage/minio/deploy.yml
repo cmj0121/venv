@@ -110,6 +110,16 @@ spec:
                 name: minio
                 port:
                   number: 9000
+    - host: "*.minio.cmjserv.local"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minio
+                port:
+                  number: 9000
     - host: minio-console.cmjserv.local
       http:
         paths:
