@@ -1,0 +1,3 @@
+# NOTE should not contains '#' or change the separate in Makefile
+CLUSTER_NFS_SERVER 		:= localhost
+CLUSTER_NFS_EXPOSE_PATH	:= /
