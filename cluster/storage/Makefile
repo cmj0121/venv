@@ -1,4 +1,4 @@
-SUBDIR   := nfs-storage
+SUBDIR   := nfs-storage minio
 
 .PHONY: all clean delete help $(SUBDIR)
 
@@ -16,3 +16,5 @@ help:		# show this message
 
 $(SUBDIR):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
+
+minio: nfs-storage
