@@ -1,4 +1,4 @@
-SUBDIR   := nfs-storage minio
+SUBDIR   := nfs-storage
 
 .PHONY: all clean delete help $(SUBDIR)
 

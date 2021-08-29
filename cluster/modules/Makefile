@@ -1,6 +1,6 @@
-SUBDIR   := storage modules
+SUBDIR := ingress-nginx minio
 
-.PHONY: all clean delete help $(SUBDIR)
+.PHONY: all clean help deploy delete $(SUBDIR)
 
 all: $(SUBDIR)  		# build all sub-project
 
@@ -18,4 +18,4 @@ help:		# show this message
 $(SUBDIR):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
 
-modules: storage
+minio: ingress-nginx
