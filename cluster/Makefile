@@ -1,13 +1,11 @@
 SUBDIR   := storage modules
 
-.PHONY: all clean delete help $(SUBDIR)
+.PHONY: all clean help $(SUBDIR)
 
 all: $(SUBDIR)  		# build all sub-project
 
 clean: $(SUBDIR)		# clean-up environment
 	find . -name '*.swp' -delete
-
-delete: $(SUBDIR)		# remove the service
 
 help:		# show this message
 	@printf "Usage: make [OPTION]\n"
@@ -19,3 +17,7 @@ $(SUBDIR):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
 
 modules: storage
+
+
+.PHONY: apply delete
+apply delete: $(SUBDIR)		# apply remove the service

@@ -1,9 +1,9 @@
 # load the global config
 include ../../Makefile.in
 
-.PHONY: all clean help delete deploy
+.PHONY: all clean help
 
-all: deploy	 # build all sub-project
+all:		 # build all sub-project
 
 clean: 		# clean-up environment
 
@@ -13,7 +13,8 @@ help:		# show this message
 	@perl -nle 'print $$& if m{^[\w-]+:.*?#.*$$}' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?#"} {printf "    %-18s %s\n", $$1, $$2}'
 
-deploy: deploy.yml	# deploy the NFS StorageClass
+.PHONY: apply delete test
+apply: deploy.yml	# deploy the NFS StorageClass
 	kubectl apply -f $<
 
 delete: deploy.yml 	# remove the service
