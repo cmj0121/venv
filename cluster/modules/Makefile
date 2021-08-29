@@ -1,4 +1,4 @@
-SUBDIR := ingress-nginx minio
+SUBDIR := ingress-nginx minio gitea
 
 .PHONY: all clean help $(SUBDIR)
 
@@ -16,7 +16,7 @@ help:		# show this message
 $(SUBDIR):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
 
-minio: ingress-nginx
+minio gitea: ingress-nginx
 
 .PHONY: apply delete
 apply delete: $(SUBDIR)		# apply remove the service
