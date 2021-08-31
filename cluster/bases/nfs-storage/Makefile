@@ -15,4 +15,4 @@ apply:
 	kubectl apply -f manifests/
 
 delete:
-	kubectl delete -f manifests/
+	kubectl delete -f manifests/ --ignore-not-found=true

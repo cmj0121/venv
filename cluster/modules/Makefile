@@ -1,4 +1,4 @@
-SUBDIR :=
+SUBDIR := monitoring dashboard
 .PHONY: all clean help $(SUBDIR)
 
 all: $(SUBDIR) 		# build all sub-project

@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  labels:
+    monitoring: node-exporter
+  annotations:
+    # NOTE - ignore the linter
+    ignore-check.kube-linter.io/host-network: ""
+    ignore-check.kube-linter.io/host-pid: ""
+    ignore-check.kube-linter.io/run-as-non-root: ""
+    ignore-check.kube-linter.io/sensitive-host-mounts: ""
+spec:
+  selector:
+    matchLabels:
+      daemon: node-exporter
+  template:
+    metadata:
+      name: node-exporter
+      labels:
+        daemon: node-exporter
+    spec:
+      containers:
+        - name: node-exporter
+          image: quay.io/prometheus/node-exporter:v1.2.2
+          args:
+            - --path.procfs=/proc_host
+            - --path.sysfs=/host_sys
+          ports:
+            - name: node-exporter
+              hostPort: 9100
+              containerPort: 9100
+          volumeMounts:
+            - name: sys
+              readOnly: true
+              mountPath: /host_sys
+            - name: proc
+              readOnly: true
+              mountPath: /proc_host
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 250m
+            limits:
+              memory: 1Gi
+              cpu: 1000m
+          securityContext:
+            readOnlyRootFilesystem: true
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
+      restartPolicy: Always
+      hostNetwork: true
+      hostPID: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  labels:
+    daemon: node-exporter
+spec:
+  ports:
+    - name: prometheus-node-exporter
+      port: 9100
+      protocol: TCP
+  selector:
+    daemon: node-exporter

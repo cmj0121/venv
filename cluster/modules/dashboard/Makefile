@@ -10,12 +10,15 @@ help:		# show this message
 	@perl -nle 'print $$& if m{^[\w-]+:.*?#.*$$}' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?#"} {printf "    %-18s %s\n", $$1, $$2}'
 
-.PHONY: apply delete test
+.PHONY: apply delete
 apply:
-	kubectl apply -f namespace.yml
 	kubectl apply -f manifests/
-	kubectl wait deployment/ingress-nginx-controller -n ingress-nginx --for=condition=Available --timeout=60s
+	# dump the token
+	# kubectl -n kubernetes-dashboard describe secret admin-user-token | grep '^token'
 
 delete:
-	kubectl delete -f manifests/    --ignore-not-found=true
-	kubectl delete -f namespace.yml --ignore-not-found=true
+	kubectl delete -f manifests/ --ignore-not-found=true
+
+port-forward:
+	# you can change to another service
+	kubectl port-forward -n kubernetes-dashboard svc/kubernetes-dashboard 1443:443
