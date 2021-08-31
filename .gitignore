@@ -1,5 +1,4 @@
 *.sw[po]
-.*
 !profile/.*
 *.zip
 terraform.tfstate*
